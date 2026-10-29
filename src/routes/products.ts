@@ -19,7 +19,7 @@ app.get("/:id", (c) => {
     const id = c.req.param("id");
     const product = products.find(product => product.id === id);
     if (!product) {
-        throw new HTTPException(404, { message: "Product not found." });
+        throw new HTTPException(404, { message: "Product not found" });
     }
     return c.json(product)
 })

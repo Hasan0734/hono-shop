@@ -33,7 +33,7 @@ app.post('/', async (c) => {
 
             if (!order) break;
 
-            if(order.status === 'paid') {
+            if (order.status === 'paid') {
                 console.log(`Order ${order.id} is already paid, skipping`)
                 break;
             }
@@ -42,6 +42,16 @@ app.post('/', async (c) => {
                 order.status = 'paid';
                 order.paymentIntentId = session.payment_intent as string
                 console.log(`Order ${order.id} is paid`)
+            }
+            break;
+        }
+        case 'charge.refunded': {
+            const charge = event.data.object;
+            for (const order of orders.values()) {
+                if (order.paymentIntentId === charge.payment_intent) {
+                    order.status = 'refunded';
+                    console.log(`Order ${order.id} is refunded`)
+                }
             }
             break;
         }
